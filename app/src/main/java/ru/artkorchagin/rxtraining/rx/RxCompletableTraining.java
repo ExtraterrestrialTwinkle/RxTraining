@@ -2,6 +2,7 @@ package ru.artkorchagin.rxtraining.rx;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import ru.artkorchagin.rxtraining.exceptions.ExpectedException;
 import ru.artkorchagin.rxtraining.exceptions.NotImplementedException;
 
 /**
@@ -18,7 +19,7 @@ public class RxCompletableTraining {
      * @return {@link Completable}, который вызывает {@link #havyMethod()}
      */
     Completable callFunction() {
-        throw new NotImplementedException();
+        return Completable.fromAction(this::havyMethod);
     }
 
     /**
@@ -29,7 +30,7 @@ public class RxCompletableTraining {
      * @return {@code Completable}
      */
     Completable completeWhenTrue(Single<Boolean> checkSingle) {
-        throw new NotImplementedException();
+        return checkSingle.flatMapCompletable(bool -> bool ? Completable.complete() : Completable.error(new ExpectedException()));
     }
 
     /* Вспомогательные методы */

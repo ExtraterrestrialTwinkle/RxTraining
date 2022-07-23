@@ -1,6 +1,10 @@
 package ru.artkorchagin.rxtraining.rx;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import ru.artkorchagin.rxtraining.exceptions.ExpectedException;
 import ru.artkorchagin.rxtraining.exceptions.NotImplementedException;
 
@@ -20,7 +24,7 @@ public class RxCreatingTraining {
      * @return {@link Observable}, который эммитит только значение {@code value}
      */
     public Observable<Integer> valueToObservable(int value) {
-        throw new NotImplementedException();
+        return Observable.just(value);
     }
 
     /**
@@ -30,7 +34,7 @@ public class RxCreatingTraining {
      * @return {@link Observable}, который эммитит по порядку все строки из заданного массива
      */
     public Observable<String> arrayToObservable(String[] array) {
-        throw new NotImplementedException();
+        return Observable.fromArray(array);
     }
 
     /**
@@ -41,7 +45,7 @@ public class RxCreatingTraining {
      * {@link #expensiveMethod()}
      */
     public Observable<Integer> expensiveMethodResult() {
-        throw new NotImplementedException();
+        return Observable.fromCallable(this::expensiveMethod);
     }
 
     /**
@@ -55,7 +59,7 @@ public class RxCreatingTraining {
      * {@code onError} или {@code onComplete} не должны вызваться.
      */
     public Observable<Long> increasingSequenceWithDelays(long initialDelay, long period) {
-        throw new NotImplementedException();
+        return Observable.interval(initialDelay, period, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -66,7 +70,7 @@ public class RxCreatingTraining {
      * задержкой {@code delay}
      */
     public Observable<Long> delayedZero(long delay) {
-        throw new NotImplementedException();
+        return Observable.just(0L).delay(delay, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -80,7 +84,10 @@ public class RxCreatingTraining {
      * 3. {@link #unstableMethod(boolean)}
      */
     public Observable<Integer> combinationExpensiveMethods(final boolean unstableCondition) {
-        throw new NotImplementedException();
+        Observable<Integer> firstObservable = Observable.fromCallable(this::expensiveMethod);
+        Observable<Integer> secondObservable = Observable.fromCallable(this::alternativeExpensiveMethod);
+        Observable<Integer> thirdObservable = Observable.fromCallable(() -> unstableMethod(unstableCondition));
+        return firstObservable.mergeWith(secondObservable).mergeWith(thirdObservable);
     }
 
     /**
@@ -90,7 +97,7 @@ public class RxCreatingTraining {
      * {@code onComplete} или {@code onError}
      */
     public Observable<Integer> withoutAnyEvents() {
-        throw new NotImplementedException();
+        return Observable.never();
     }
 
     /**
@@ -99,7 +106,7 @@ public class RxCreatingTraining {
      * @return {@link Observable} который не эммитит значения, вызывается только {@code onComplete}
      */
     public Observable<Integer> onlyComplete() {
-        throw new NotImplementedException();
+        return Observable.empty();
     }
 
     /**
@@ -109,7 +116,7 @@ public class RxCreatingTraining {
      * ошибка {@link ExpectedException}
      */
     public Observable<Integer> onlyError() {
-        throw new NotImplementedException();
+        return Observable.error(new ExpectedException());
     }
 
     /* Вспомогательные методы */

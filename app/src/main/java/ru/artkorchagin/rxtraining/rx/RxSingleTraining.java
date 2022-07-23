@@ -24,7 +24,7 @@ public class RxSingleTraining {
      * либо ошибку {@link ExpectedException} если оно отрицательное
      */
     Single<Integer> onlyOneElement(Integer value) {
-        throw new NotImplementedException();
+        return value >= 0 ? Single.just(value) : Single.error(new ExpectedException());
     }
 
     /**
@@ -36,7 +36,7 @@ public class RxSingleTraining {
      * последовательность пустая
      */
     Single<Integer> onlyOneElementOfSequence(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.firstOrError();
     }
 
     /**
@@ -47,7 +47,7 @@ public class RxSingleTraining {
      * пустая
      */
     Single<Integer> calculateSumOfValues(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.reduce(Integer::sum).toSingle();
     }
 
     /**
@@ -58,7 +58,7 @@ public class RxSingleTraining {
      * {@code integerObservable}
      */
     Single<List<Integer>> collectionOfValues(Observable<Integer> integerObservable) {
-        throw new NotImplementedException();
+        return integerObservable.toList();
     }
 
     /**
@@ -69,7 +69,7 @@ public class RxSingleTraining {
      * {@code integerSingle} положительны, {@code false} если есть отрицательные элементы
      */
     Single<Boolean> allElementsIsPositive(Observable<Integer> integerSingle) {
-        throw new NotImplementedException();
+        return integerSingle.all( x -> x >= 0 );
     }
 
 }
